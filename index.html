@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sagey Gıda | Kantin İşletmeciliği ve Gıda Çözümleri</title>
+    <style>
+        :root {
+            --primary-color: #594f14;
+            --dark-color: #1a1a1a;
+            --light-bg: #fdfbf7;
+            --white: #ffffff;
+            --accent-gold: #c5a059;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-color);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--dark-color);
+        }
+
+        .logo-sub {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary-color);
+        }
+
+        /* Page Management (SPA simulation for Multi-page feel) */
+        .page-section {
+            display: none;
+            padding-top: 100px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page-section.active-page {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 85vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #433b0e;
+            transform: translateY(-2px);
+        }
+
+        /* Sections General */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: var(--dark-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 10px auto 0;
+        }
+
+        /* Hakkımızda */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .about-content p {
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        /* Hizmetler */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        /* Referanslar Sayfası Grid & Büyütülmüş Logolar / Kartlar */
+        .references-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            color: #666;
+        }
+
+        .references-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .reference-card {
+            background: var(--white);
+            padding: 35px 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .reference-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(89, 79, 20, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .reference-card .logo-placeholder {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .reference-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Marquee Container (Anasayfa için küçük özet) */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            width: 100%;
+            background: var(--white);
+            padding: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            margin-top: 30px;
+        }
+
+        .marquee-track {
+            display: inline-flex;
+            gap: 40px;
+            animation: scroll 25s linear infinite;
+            align-items: center;
+        }
+
+        .brand-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            background: #f4efe6;
+            padding: 12px 24px;
+            border-radius: 6px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* İletişim Sayfası & Harita */
+        .contact-page-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .contact-info-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .contact-info-box h3 {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .contact-info-box p {
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .contact-form-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .contact-form textarea {
+            height: 130px;
+            resize: vertical;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+            border: 1px solid #ddd;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: var(--white);
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            nav ul { display: none; }
+            .services-grid, .contact-page-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo-area" onclick="switchPage('anasayfa')">
+                <span class="logo-text">SAGEY</span>
+                <span class="logo-sub">KANTİN</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a id="nav-anasayfa" class="active" onclick="switchPage('anasayfa')">Anasayfa</a></li>
+                    <li><a id="nav-hakkimizda" onclick="switchPage('hakkimizda')">Hakkımızda</a></li>
+                    <li><a id="nav-hizmetler" onclick="switchPage('hizmetler')">Hizmetler</a></li>
+                    <li><a id="nav-referanslar" onclick="switchPage('referanslar')">Referanslar</a></li>
+                    <li><a id="nav-iletisim" onclick="switchPage('iletisim')">İletişim</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- SAYFA 1: ANASAYFA -->
+    <section id="page-anasayfa" class="page-section active-page" style="padding-top: 70px;">
+        <div class="hero" style="margin-top:0;">
+            <div class="hero-content">
+                <h1>Kaliteli ve Güvenilir Gıda Çözümleri</h1>
+                <p>Okul ve kurum kantin işletmeciliğinde modern, hijyenik ve lezzetli nesiller için çalışıyoruz.</p>
+                <p style="font-size: 18px; font-weight: 600; color: #f4efe6; margin-bottom: 25px;">İş ortaklığı için bize ulaşın!</p>
+                <a onclick="switchPage('iletisim')" class="btn">İletişime Geçin</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">Öne Çıkan Çözümlerimiz</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Kantin İşletmeciliği</h3>
+                    <p>Eğitim kurumları ve kampüsler için modern, öğrenci dostu ve tam donanımlı kantin çözümleri.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Toplu Gıda Tedariği</h3>
+                    <p>Gıda güvenliği standartlarına uygun, taze ve kaliteli ürünlerin güvenilir tedarik süreçleri.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Kafeterya & Büfe</h3>
+                    <p>Alternatif yeme-içme alanları için konsept tasarımı ve profesyonel işletme hizmetleri.</p>
+                </div>
+            </div>
+
+            <!-- Kayan Referans Bant Özeti -->
+            <div style="margin-top: 60px;">
+                <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary-color);">Güvenilir İş Ortaklarımızdan Bazıları</h3>
+                <div class="marquee-container">
+                    <div class="marquee-track">
+                        <div class="brand-logo">🌾 Ülker</div>
+                        <div class="brand-logo">🥛 Sütaş</div>
+                        <div class="brand-logo">🍫 Eti</div>
+                        <div class="brand-logo">🧊 Pınar</div>
+                        <div class="brand-logo">☕ Nescafe</div>
+                        <div class="brand-logo">🥤 Coca-Cola</div>
+                        <div class="brand-logo">🍟 Lays / Doritos</div>
+                        <div class="brand-logo">💧 Hayat Su</div>
+                        <div class="brand-logo">🍪 Torku</div>
+                        <div class="brand-logo">🌾 Ülker</div>
+                        <div class="brand-logo">🥛 Sütaş</div>
+                        <div class="brand-logo">🍫 Eti</div>
+                        <div class="brand-logo">🧊 Pınar</div>
+                        <div class="brand-logo">☕ Nescafe</div>
+                        <div class="brand-logo">🥤 Coca-Cola</div>
+                        <div class="brand-logo">🍟 Lays / Doritos</div>
+                        <div class="brand-logo">💧 Hayat Su</div>
+                        <div class="brand-logo">🍪 Torku</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAYFA 2: HAKKIMIZDA -->
+    <section id="page-hakkimizda" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Hakkımızda</h2>
+            <div class="about-content">
+                <p>Sagey Gıda olarak, uzun yıllara dayanan sektör tecrübemizle toplu beslenme sistemleri ve kantin işletmeciliği alanında güvenilir hizmet sunmaktayız.</p>
+                <p>Öğrencilerimizin ve çalışanların sağlıklı, taze ve kaliteli gıdaya güvenle ulaşabilmesi için hijyen standartlarından ödün vermeden titizlikle çalışıyoruz.</p>
+                <p>Yenilikçi yaklaşımımız, güçlü tedarik zincirimiz ve güler yüzlü ekibimizle kampüs yaşamına değer katmaya devam ediyoruz.</p>
+                <p style="font-weight: 600; color: var(--primary-color); margin-top: 20px;">İş ortaklığı için bize ulaşın!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAYFA 3: HİZMETLER -->
+    <section id="page-hizmetler" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Tüm Hizmetlerimiz</h2>
+            <div class="services-grid" style="margin-bottom: 40px;">
+                <div class="service-card">
+                    <h3>Kantin İşletmeciliği</h3>
+                    <p>Eğitim kurumları ve kampüsler için modern, öğrenci dostu ve tam donanımlı kantin çözümleri sunuyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Toplu Gıda Tedariği</h3>
+                    <p>Gıda güvenliği standartlarına tam uygun, taze ve kaliteli ürünlerin güvenilir tedarik süreçlerini yönetiyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Kafeterya & Büfe</h3>
+                    <p>Alternatif yeme-içme alanları için modern konsept tasarımı ve profesyonel işletme hizmetleri sağlıyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Hijyen ve Kalite Kontrol</h3>
+                    <p>ISO standartlarında düzenli denetimler ve gıda güvenliği protokolleriyle sağlığı ön planda tutuyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Dijital Kantin Çözümleri</h3>
+                    <p>Temassız ödeme sistemleri, hızlı sipariş altyapısı ve öğrenci dostu dijital entegrasyonlar kuruyoruz.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Özel İkram & Organizasyon</h3>
+                    <p>Okul etkinlikleri, mezuniyetler ve özel kurumsal günler için profesyonel ikram hizmetleri sunuyoruz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAYFA 4: REFERANSLAR -->
+    <section id="page-referanslar" class="page-section">
+        <div class="container">
+            <h2 class="section-title">Referanslarımız</h2>
+            <p class="references-intro">Yüksek kalite standartlarımız çerçevesinde, sektörün öncü ve güvenilir tüm gıda ve içecek markalarıyla güç birliği yapıyor, kantinlerimizde en iyisini sunuyoruz.</p>
+            
+            <div class="references-grid">
+                <div class="reference-card">
+                    <div class="logo-placeholder">🌾 Ülker</div>
+                    <p>Atıştırmalık, bisküvi ve unlu mamul kategorisinde stratejik iş ortaklığı.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">🥛 Sütaş</div>
+                    <p>Günlük taze süt, ayran ve süt ürünleri tedarik zinciri.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">🍫 Eti</div>
+                    <p>Güvenilir lezzetler, çikolata ve sağlıklı atıştırmalık işbirlikleri.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">🧊 Pınar</div>
+                    <p>Soğuk zincir gıda, süt ürünleri ve içecek grubu tedariği.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">☕ Nescafe</div>
+                    <p>Sıcak içecek otomatları ve kahve çözümleri ortaklığı.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">🥤 Coca-Cola</div>
+                    <p>Serinletici gazlı içecek portföyü ve soğutucu ekipman desteği.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">🍟 Lays / Doritos</div>
+                    <p>Frito-Lay çerez ve cips çeşitleriyle genişletilmiş reyon çözümleri.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">💧 Hayat Su</div>
+                    <p>Sağlıklı yaşam ve ambalajlı su tedariğinde güvenilir marka ortaklığı.</p>
+                </div>
+                <div class="reference-card">
+                    <div class="logo-placeholder">🍪 Torku</div>
+                    <p>Doğrudan üreticiden yerli ve doğal atıştırmalık ürün grupları.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAYFA 5: İLETİŞİM & HARİTA -->
+    <section id="page-iletisim" class="page-section">
+        <div class="container">
+            <h2 class="section-title">İletişim ve Konum</h2>
+            <div class="contact-page-grid">
+                <div class="contact-info-box">
+                    <h3>Merkez Ofisimiz</h3>
+                    <p style="margin: 15px 0;">Projeleriniz, kantin işletmeciliği ve iş ortaklığı talepleriniz için bizimle iletişime geçebilirsiniz.</p>
+                    <p><strong>Adres:</strong> Maslak Mah. Dereboyu Cad. Gıda Plaza No: 45/A Sarıyer / İstanbul</p>
+                    <p><strong>E-posta:</strong> bilgi@sageygida.com.tr</p>
+                    <p><strong>Telefon:</strong> 0 (212) 000 00 00</p>
+                    <p><strong>Çalışma Saatleri:</strong> Hafta içi 08:30 - 18:00</p>
+                </div>
+                <div class="contact-form-box">
+                    <h3>Bize Mesaj Gönderin</h3>
+                    <form class="contact-form" onsubmit="event.preventDefault(); alert('Mesajınız başarıyla gönderildi. Teşekkür ederiz!');">
+                        <input type="text" placeholder="Adınız Soyadınız" required>
+                        <input type="email" placeholder="E-posta Adresiniz" required>
+                        <input type="tel" placeholder="Telefon Numaranız">
+                        <textarea placeholder="Mesajınız..." required></textarea>
+                        <button type="submit" class="btn" style="width: 100%;">Gönder</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- İnteraktif Harita Alanı -->
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3006.347714896791!2d29.0121!3d41.1099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sNDDCsDA2JzM1LjYiTiAyOcKwMDAnNDMuNiJF!5e0!3m2!1str!2str!4v1620000000000!5m2!1str!2str" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Sagey Gıda - Tüm Hakları Saklıdır. | İş ortaklığı için bize ulaşın.</p>
+    </footer>
+
+    <!-- Sayfalar Arası Geçiş Scripti -->
+    <script>
+        function switchPage(pageId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.remove('active-page'));
+
+            document.getElementById('page-' + pageId).classList.add('active-page');
+
+            const navLinks = document.querySelectorAll('nav ul li a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            const activeNav = document.getElementById('nav-' + pageId);
+            if(activeNav) {
+                activeNav.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
